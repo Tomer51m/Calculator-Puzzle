@@ -46,8 +46,8 @@ function checkIfWon() {
 
 //number buttons event listeners
 for (const button of numberButtons ) {
-    button.addEventListener('click', (event) => {        
-        if(resultField.innerText === '0') {
+    button.addEventListener('click', (event) => {     
+        if(resultField.innerText === '0' || calculate ==='') {
             resultField.innerText = '';
         }
         resultField.innerText += event.target.innerText;
@@ -74,6 +74,7 @@ for (const special of specialButtons) {
 equelButton.addEventListener('click', () => {
     const result = eval(calculate) || '0';
     resultField.innerText = result;
+    calculate = '';
     for (const button of numberButtons ) {
         button.classList.remove('disable');
     }
