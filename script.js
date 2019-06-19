@@ -12,17 +12,16 @@ const specialButtons = document.querySelectorAll('.special-container');
 const equelButton = document.querySelector('.equel');
 const acButton = document.querySelector('.ac');
 
-shuffleCalculator()
 //shuffle numbers
 function shuffleCalculator() {
     let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    let i = 0
-    while (numbersArray != 0) {
+    let i = 0;
+    while (numbersArray.length != 0) {
         // randomize button container numbers
         const randomNumber = Math.floor(Math.random() * numbersArray.length);
         const randomizedNumber = numbersArray.splice(randomNumber, 1);
         numberButtons[i].attributes[1].value = randomizedNumber;
-        i += 1
+        i += 1;
     }
 }
 
@@ -31,8 +30,8 @@ function checkIfWon() {
     const currentButtonValue = [];
     
     for (let i = 0; i < 10; i += 1) {
-        currentButtonContainer.push(numberButtons[i].attributes[1].value)
-        currentButtonValue.push(numberButtons[i].children[0].innerText) 
+        currentButtonContainer.push(numberButtons[i].attributes[1].value);
+        currentButtonValue.push(numberButtons[i].children[0].innerText);
     }
 
     if(JSON.stringify(currentButtonContainer) === JSON.stringify(currentButtonValue) ) {
@@ -41,9 +40,8 @@ function checkIfWon() {
             button.children[0].classList.add('won');                
         }
     }
-    console.log(currentButtonContainer);
-    console.log(currentButtonValue);
-
+    console.log('inner value', currentButtonContainer);
+    console.log('button value', currentButtonValue);
 }
 
 //number buttons event listeners
@@ -96,7 +94,7 @@ acButton.addEventListener('click', () => {
 })
 
 startBtn.addEventListener('click', (event) => {
-    // array to reset numbers to initial locations
+    // array to reset button numbers to initial locations
     let intialNumbersArray = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
     let i = 0;
     for(button of numberButtons) {
@@ -141,7 +139,6 @@ for(const button of numberButtons) {
 
     button.addEventListener('drop', (event) => {
         event.preventDefault();
-        
         if(event.target.parentElement.className === 'botton-container number-container') {
             currentElement = event.target;
             event.target.style.opacity = '';
