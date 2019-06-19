@@ -15,16 +15,13 @@ const acButton = document.querySelector('.ac');
 shuffleCalculator()
 //shuffle numbers
 function shuffleCalculator() {
-    let numbersArrayInner = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    let numbersArrayOuter = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let numbersArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     let i = 0
-    while (numbersArrayOuter != 0) {
-        const randomOuter = Math.floor(Math.random() * numbersArrayOuter.length);
-        const randomInner = Math.floor(Math.random() * numbersArrayInner.length);
-        const randomNumberInner = numbersArrayInner.splice(randomOuter, 1);
-        const randomNumberOuter = numbersArrayOuter.splice(randomInner, 1);
-        numberButtons[i].attributes[1].value = randomNumberOuter;
-        numberButtons[i].children[0].innerText = randomNumberInner;
+    while (numbersArray != 0) {
+        // randomize button container numbers
+        const randomNumber = Math.floor(Math.random() * numbersArray.length);
+        const randomizedNumber = numbersArray.splice(randomNumber, 1);
+        numberButtons[i].attributes[1].value = randomizedNumber;
         i += 1
     }
 }
@@ -40,9 +37,13 @@ function checkIfWon() {
 
     if(JSON.stringify(currentButtonContainer) === JSON.stringify(currentButtonValue) ) {
         for(button of numberButtons) {
+            button.children[0].classList.remove('flash');                
             button.children[0].classList.add('won');                
         }
     }
+    console.log(currentButtonContainer);
+    console.log(currentButtonValue);
+
 }
 
 //number buttons event listeners
@@ -51,7 +52,6 @@ for (const button of numberButtons ) {
         if(resultField.innerText === '0') {
             resultField.innerText = '';
         }
-        
         resultField.innerText += event.target.innerText;
         calculate += event.target.parentElement.attributes[1].value;
         button.classList.add('disable');
@@ -65,8 +65,10 @@ for (const special of specialButtons) {
         if(calculate === '') {
             return
         }
+        special.classList.add('disable');
         calculate += event.target.parentElement.attributes[1].value;
         resultField.innerText += event.target.parentElement.attributes[1].value;
+
         // console.log(calculate);
     })
 }
@@ -77,6 +79,9 @@ equelButton.addEventListener('click', () => {
     for (const button of numberButtons ) {
         button.classList.remove('disable');
     }
+    for (const special of specialButtons ) {
+        special.classList.remove('disable');
+    }
 })
 
 acButton.addEventListener('click', () => {
@@ -85,12 +90,26 @@ acButton.addEventListener('click', () => {
     for (const button of numberButtons ) {
         button.classList.remove('disable');
     }
+    for (const special of specialButtons ) {
+        special.classList.remove('disable');
+    }
 })
 
 startBtn.addEventListener('click', (event) => {
+    // array to reset numbers to initial locations
+    let intialNumbersArray = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
+    let i = 0;
     for(button of numberButtons) {
+        button.children[0].classList.add('flash');   
+        //reactivate flash animation on button
+        let oldButton = button.children[0];
+        let newButton = button.children[0].cloneNode(true);
+        button.replaceChild(newButton, oldButton);
+        // set button to intial state
         button.children[0].classList.remove('won');   
-        button.classList.remove('disable')             
+        button.classList.remove('disable')  
+        button.children[0].innerText = intialNumbersArray[i];
+        i += 1;
     }
     resultField.innerText = '0';
     calculate = '';
@@ -105,8 +124,8 @@ for(const button of numberButtons) {
     })
 
     button.addEventListener('dragenter', (event) => {
-        if(event.target.className === 'button') {
-            event.target.style.opacity = .5;
+        if(event.target.className === 'button flash') {
+            event.target.style.opacity = .7;
         }
     })
 
@@ -115,7 +134,7 @@ for(const button of numberButtons) {
     })
 
     button.addEventListener('dragleave', (event) => {
-        if(event.target.className === 'button') {
+        if(event.target.className === 'button flash') {
             event.target.style.opacity = '';
         }
     })
